@@ -1,7 +1,9 @@
 package com.SChat.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -10,13 +12,15 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Massage {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY )
     private Long id ;
 
 //    @NotNull(Massage = 'Not be null it be' )
-    String contsant;
+    String contant;
     LocalDateTime timestamp;
     boolean seen = false;
 
