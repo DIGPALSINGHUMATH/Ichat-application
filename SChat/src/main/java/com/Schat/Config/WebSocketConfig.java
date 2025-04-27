@@ -1,4 +1,4 @@
-package com.SChat.Config;
+package com.Schat.Config;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
         config.enableSimpleBroker("/user");
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/topic");
         config.setUserDestinationPrefix("/user");
     }
-
-    public void resgisterStompEndPoints(StompEndpointRegistry registry){
-        registry.addEndpoint("/endPoint").setAllowedOrigins("*").withSockJS();
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry){
+        registry.addEndpoint("/endPoint").setAllowedOriginPatterns("*").withSockJS();
     }
 
 
@@ -44,6 +44,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
 
-        return true;
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.SChat;
+package com.Schat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
