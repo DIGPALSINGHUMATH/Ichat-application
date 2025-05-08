@@ -35,7 +35,7 @@ function Signup() {
     const message = { username: form.username, nickname: form.nickname, password: form.password };
 
     // Send the signup data to the WebSocket server
-    stompClient.send("/app/user.signup", {}, JSON.stringify(message));
+    stompClient.send("/topic/user.addUser", {}, JSON.stringify(message));
 
     // Listen for the server response and handle successful login
     stompClient.connect({}, () => {
