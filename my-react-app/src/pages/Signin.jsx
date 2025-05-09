@@ -9,14 +9,28 @@ function Signin() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);  // To show any login errors
   const stompClientRef = useRef(null);  // Ref to hold the STOMP client instance
+  const [isConnected, setIsConnected] = useState(false);  // Track WebSocket connection status
 
   useEffect(() => {
     // Establish WebSocket connection on component mount
-    const socket = connect();
-    stompClientRef.current = socket; // Store socket client in ref
+    connect(
+      (client) => {
+        stompClientRef.current = client; // Store socket client in ref
+        setIsConnected(true);  // Mark as connected
+
+        console.log("✅ Connected to WebSocket server");
+      },
+      (error) => {
+        setIsConnected(false); // Mark as disconnected
+        setError("Failed to connect to the server.");
+        console.error("WebSocket connection failed:", error);
+      }
+    );
+
     return () => {
+      // Cleanup on component unmount
       if (stompClientRef.current) {
-        stompClientRef.current.disconnect(); // Cleanup on unmount
+        stompClientRef.current.deactivate(); // Correct cleanup for STOMP client
       }
     };
   }, []);
@@ -40,7 +54,7 @@ function Signin() {
 
       // Publish login credentials to the backend via WebSocket
       stompClientRef.current.publish({
-        destination: "/topic/user.loginUser",  // Make sure this endpoint exists on your backend
+        destination: "/topic/user.loginUser",  // Ensure this endpoint exists on your backend
         body: JSON.stringify(user),
       });
 
@@ -87,6 +101,7 @@ function Signin() {
         <button
           onClick={handleSignin}
           className="w-full bg-blue-500 text-white p-2 rounded"
+          disabled={!isConnected}  // Disable button if WebSocket is not connected
         >
           Sign In
         </button>

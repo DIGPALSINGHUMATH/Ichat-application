@@ -83,7 +83,7 @@ function Signup({ login }) {
         status: 'ONLINE',
     });
 
-    const navigate = useNavigate();
+    const navigate = useNavigate("/chat");
 
     useEffect(() => {
         connect((client) => {
