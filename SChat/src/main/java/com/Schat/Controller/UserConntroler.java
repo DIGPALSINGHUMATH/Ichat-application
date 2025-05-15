@@ -12,10 +12,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,15 +22,26 @@ public class UserConntroler {
     private  final UserService userService;
 
     @MessageMapping("/user.addUser")
-    @SendTo("/user/topic")
+    @SendTo("user/topic")
     public User addUser(@Payload User user){
-        System.out.println("Received user: " + user);  // Log received user
-        userService.saveUser(user);
-        return user;
+        try{
+            System.out.println("Received user: " + user);  // Log received user
+            userService.saveUser(user);
+            System.out.println("add user info : " + user);
+            return user;
+        }catch (Exception e){
+            // Log the exception details for debugging
+            System.err.println("Error in addUser: " + e.getMessage());
+            e.printStackTrace();
+            // Optionally, repackage and send an error message to the client
+
+        }
+        return null;
     }
 
+
     @MessageMapping("/user.loginUser")
-    @SendToUser("/topic")
+    @SendToUser("/user/topic")
     public loginResponseDto loginUser(@Payload loginRequestDto request) {
         return userService.loginUser(request);
     }
@@ -48,7 +56,8 @@ public class UserConntroler {
 
 
 
-    @GetMapping("/users/connected")
+    @GetMapping("/user/connected")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<List<User>> findConnectionUser(){
         return ResponseEntity.ok(userService.findConnectedUser());
     }

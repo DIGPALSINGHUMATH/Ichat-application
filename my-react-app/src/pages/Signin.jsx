@@ -6,7 +6,7 @@ import { connect } from '../WebSocket'; // Assuming WebSocket connection helper
 function Signin() {
   const navigate = useNavigate();
   const { login } = useAuth();  // Using Auth context for handling login state
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ username: "",email:"", password: "" });
   const [error, setError] = useState(null);  // To show any login errors
   const stompClientRef = useRef(null);  // Ref to hold the STOMP client instance
   const [isConnected, setIsConnected] = useState(false);  // Track WebSocket connection status
@@ -49,12 +49,13 @@ function Signin() {
       // Create user object from form state
       const user = {
         username: form.username,
+        email: form.email,
         password: form.password,
       };
 
       // Publish login credentials to the backend via WebSocket
       stompClientRef.current.publish({
-        destination: "/topic/user.loginUser",  // Ensure this endpoint exists on your backend
+        destination: "/app/user.loginUser",  // Ensure this endpoint exists on your backend
         body: JSON.stringify(user),
       });
 
@@ -64,8 +65,8 @@ function Signin() {
       stompClientRef.current.subscribe("/user/topic", (message) => {
         const response = JSON.parse(message.body);
         if (response.success) {
-          // Login successful, redirect to dashboard or home page
-          login(response.token);  // Assuming the backend sends a token or session info
+          // Login successful redirect to dashboard or home page
+           login(response.token);  // Assuming the backend sends a token or session info
           navigate("/chat");  // Or wherever you want to redirect
         } else {
           // If login fails, show the error
@@ -89,6 +90,13 @@ function Signin() {
           onChange={handleChange}
           className="w-full mb-3 p-2 border rounded"
           placeholder="Username"
+        />
+        <input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          className="w-full mb-3 p-2 border rounded"
+          placeholder="email"
         />
         <input
           name="password"

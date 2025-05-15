@@ -37,10 +37,10 @@ public class UserService {
         }
 
         if (user != null && user.getPassword().equals(request.getPassword())) {
-            return new loginResponseDto(true, "Login successful", "dummy-token-123", user.getEmail());
+            return new loginResponseDto(true, "Login successful", user.getEmail());
         }
 
-        return new loginResponseDto(false, "Invalid credentials", null, null);
+        return new loginResponseDto(false, "Invalid credentials", null);
     }
 
 

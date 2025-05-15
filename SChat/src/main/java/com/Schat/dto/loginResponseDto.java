@@ -5,14 +5,14 @@ public class loginResponseDto {
     private boolean success;
     private String massage;
     private String email;
-    private String token;
+//    private String token;
 
 
-    public loginResponseDto(boolean success, String massage, String email, String token) {
+    public loginResponseDto(boolean success, String massage, String email) {
         this.success = success;
         this.massage = massage;
         this.email = email;
-        this.token = token;
+//        this.token = token;
 
     }
 

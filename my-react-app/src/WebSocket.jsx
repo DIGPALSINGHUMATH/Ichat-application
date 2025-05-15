@@ -18,3 +18,14 @@ export function connect(onConnected) {
 
     stompClient.activate();
 }
+
+export const sendMessage = (message) => {
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: "/app/chat",
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error("Not connected to WebSocket");
+    }
+  };
